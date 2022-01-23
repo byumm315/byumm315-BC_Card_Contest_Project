@@ -1,0 +1,29 @@
+#데이터 불러오기
+info=read.csv("C:/Users/tyumi/Desktop/깃허브/Geocoding_Result_공모전.csv")
+cust=read.csv("C:/Users/tyumi/Desktop/깃허브/Geocoding_Input_고객위치.csv")
+#식당명과 도로명주소 추출하기
+colnames(info)<-c("restaurant","address",'위도','경도')
+#필요한 라이브러리 설치
+#install.packages('ggmap')
+#install.packages('stringr')
+#install.packages("geosphere")
+library(ggmap)
+library(stringr)
+library(geosphere)
+library(readr)
+customer<-cbind(cust$사용자위치경도, cust$사용자위치위도)
+colnames(customer)<-c("lat", "lon")
+#제주도에 해당하는 사용자 추출
+cust<-as.data.frame(customer)
+cust_new<-subset(cust ,lat>=33.0637 & lat<=33.2854)
+cust_new<-subset(cust_new ,lon>=126.1059 & lon<=126.5657)
+#사용자별 식당과의 거리 구하기 
+distance<-c()
+dist<-c()
+for(i in 1:nrow(info)){
+for(j in 1:nrow(cust_new)){
+dist<-append(dist,distGeo(c(info[i,4], info[i,3]),c(cust_new[j,2], cust_new[j,1])))
+}
+distance<-matrix(dist, nrow=nrow(cust_new),byrow=TRUE)
+}
+write.csv(t(distance),'C:/Users/tyumi/Desktop/깃허브/Geocoding_Result_고객거리.csv',row.names=FALSE)
