@@ -61,4 +61,4 @@ pd_geo_coordi = pd.DataFrame({"음식점": data['restaurant'].values,
                               "경도": np_geo_coordi[:, 1]})
 
 #데이터 저장하기
-pd_geo_coordi.to_csv('info_new.csv',encoding='utf-8-sig',index=False)
+pd_geo_coordi.to_csv('Geocoding_Result_공모전.csv',encoding='utf-8-sig',index=False)
